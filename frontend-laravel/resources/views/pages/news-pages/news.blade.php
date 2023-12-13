@@ -14,10 +14,21 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">John Doe</span>
+                    <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="/login" class="dropdown-item">Log Out</a>
+                    <x-dropdown-link :href="route('profile.edit')">
+                        {{ __('Profile') }}
+                    </x-dropdown-link>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+    
+                        <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-dropdown-link>
+                    </form>
                 </div>
             </div>
         </div>
@@ -25,17 +36,14 @@
     <!-- Navbar End -->
 
     <!-- Search Start -->
-    <div class="search-bar">
-        <div class="font">
-            <label for="basic-url" class="form-label">Your News link !</label>
-        </div>
-        <div class="input-group">
-            <span class="input-group-text" id="basic-addon3">hhttps://www.youtube.com/watch?v=</span>
-            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Berita di Indonesia</h2>
     </div>
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <!-- Search End -->
 
     <!-- Analysis Start -->
@@ -44,41 +52,26 @@
             <div class="col-sm-12 col-xl-9">
                 <div class="bg-light rounded h-100 p-4">
                     <h6 class="mb-4">Details Analysis</h6>
-                    <div class="table-responsive">
-                        <table class="table">
+                    <div class="table-responsive" id="news-table-container">
+                        <table class="table" id="news-table">
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">Date</th>
-                                    <th scope="col">Comment</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Source</th>
                                     <th scope="col">Sentiment</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($news as $index => $news)
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
+                                    <th scope="row">{{ $index + 1 }}</th>
+                                    <td>{{ $news['published_date'] }}</td>
+                                    <td><a class='news-color' href="{{ $news['link']}}">{{ $news['title'] }}</a></td>
+                                    <td>{{ $news['source'] }}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -96,5 +89,4 @@
     </div>
     <!-- Analysis End -->
 </div>
-
 <!-- Content End -->

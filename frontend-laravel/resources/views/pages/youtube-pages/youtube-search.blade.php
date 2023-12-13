@@ -14,10 +14,21 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">John Doe</span>
+                    <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="/login" class="dropdown-item">Log Out</a>
+                    <x-dropdown-link :href="route('profile.edit')">
+                        {{ __('Profile') }}
+                    </x-dropdown-link>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+    
+                        <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-dropdown-link>
+                    </form>
                 </div>
             </div>
         </div>
@@ -26,18 +37,24 @@
 
     <!-- Search Start -->
     <div class="search-bar">
-        <form action="/youtube-comments" method="GET">
+        <form action="youtube-crawl" method="GET">
             @csrf
             <div class="font">
-                <label for="basic-url" class="form-label">Your YouTube link !</label>
+                <label for="video_id" class="form-label">Your YouTube link !</label>
             </div>
             <div class="input-group">
                 <span class="input-group-text" id="basic-addon3">https://www.youtube.com/watch?v=</span>
-                <input type="text" class="form-control" id="basic-url" name="video_id" aria-describedby="basic-addon3">
+                <input type="text" class="form-control" id="video_id" name="video_id" aria-describedby="basic-addon3">
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <br>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
     </div>
     <!-- Search End -->
 </div>

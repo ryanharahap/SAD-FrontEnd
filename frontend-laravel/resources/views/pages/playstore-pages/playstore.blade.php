@@ -14,10 +14,21 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">John Doe</span>
+                    <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="/login" class="dropdown-item">Log Out</a>
+                    <x-dropdown-link :href="route('profile.edit')">
+                        {{ __('Profile') }}
+                    </x-dropdown-link>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+    
+                        <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-dropdown-link>
+                    </form>
                 </div>
             </div>
         </div>
@@ -26,15 +37,23 @@
 
     <!-- Search Start -->
     <div class="search-bar">
-        <div class="font">
-            <label for="basic-url" class="form-label">Your Playstore link !</label>
+        <form action="playstore-crawl" method="GET">
+            @csrf
+            <div class="font">
+                <label for="package_name" class="form-label">Playstore Package Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" id="package_name" name="package_name"
+                    aria-describedby="basic-addon3" placeholder="example.com.package">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
-        <div class="input-group">
-            <span class="input-group-text" id="basic-addon3">hhttps://www.youtube.com/watch?v=</span>
-            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        @endif
     </div>
     <!-- Search End -->
 
@@ -43,7 +62,7 @@
         <div class="row g-4">
             <div class="col-sm-12 col-xl-9">
                 <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Details Analysis</h6>
+                    <h6 class="mb-4">Detail Analysis</h6>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -55,30 +74,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($playstore as $index => $playstore)
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
+                                    <th scope="row">{{ $index + 1 }}</th>
+                                    <td>{{ $playstore['submitted_at'] }}</td>
+                                    <td>{{ $playstore['review'] }}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>12-13-2023</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sint nobis quos
-                                        dolorem iste sit, commodi optio aperiam, expedita laborum exercitationem
-                                        quibusdam impedit distinctio quas voluptatem accusamus ratione iusto qui?</td>
-                                    <td>Positif</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
