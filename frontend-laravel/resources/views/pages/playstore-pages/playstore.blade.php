@@ -88,12 +88,20 @@
                 </div>
             </div>
             <div class="col-sm-12 col-xl-3">
-                <div class="col">
-                    <div class="bg-light rounded h-80 p-4">
-                        <h6 class="mb-4">Doughnut Chart</h6>
-                        <canvas id="doughnut-chart"></canvas>
-                    </div>
+            <!-- Word Cloud and Pie Chart -->
+                <div class="bg-light rounded h-80 p-4 mt-4">
+                    <h6 class="mb-4">Word Cloud</h6>
+                    <img src="{{ $wordcloud_url }}" alt="Word Cloud" class="img-fluid">
                 </div>
+                <div class="bg-light rounded h-80 p-4 mt-4">
+                    <h6 class="mb-4">Sentiment Count</h6>
+                    <p>Positive: {{ $positive_count }}</p>
+                    <p>Negative: {{ $negative_count }}</p>
+                </div>
+            </div>
+            <div class="bg-light rounded h-80 p-4 mt-4">
+                <h6 class="mb-4">Pie Chart</h6>
+                <img src="{{ $piechart_url }}" alt="Pie Chart" class="img-fluid">
             </div>
         </div>
     </div>
