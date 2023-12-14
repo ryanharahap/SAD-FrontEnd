@@ -10,3 +10,5 @@ Run di CMD atau terminal folder laravel:
 <br />
 
 npm run dev
+
+npm install
